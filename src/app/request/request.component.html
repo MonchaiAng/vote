@@ -1,0 +1,446 @@
+<div style="text-align:center">
+  <app-route></app-route>
+  <br>
+        <!-- Center Request -->
+        <div [ngStyle]="{'display' : this.isOfficer ? 'none' : 'initial'}">
+            <nz-radio-group [(ngModel)]="request" [nzButtonStyle]="'solid'">
+              <label nz-radio-button nzValue="Information" class="Reg_Prov" (click)="InformationList()">RequestToApproval</label>
+              <label nz-radio-button nzValue="Update" class="Reg_Prov" (click)="UpdateList()">RequestToUpdate</label>
+            </nz-radio-group>
+            <br><br>
+
+            <div [ngStyle]="{'display' : this.ShowInformationList ? 'initial' : 'none'}" >
+              <div style = "text-align:center; display: inline-block;">
+                <div *ngFor="let data of listOfRequestedConfirmations">
+                <h4 style="text-align:center; background-color: #1890ff; color:white; margin:0px; padding:5px ">
+                    {{data.prvName}} => District {{data.distNum}}
+                </h4>
+                <nz-card style="width:620px; background: #ECECEC;" >
+                  <!-- first row -->
+                        <div nz-row [nzGutter]="8">
+                          <div nz-col [nzSpan]="8">
+                            <div style="background:white; border-style: ridge; padding: 3px" >
+                                <h3>Party No.1</h3>
+                                <hr>
+                                <input nz-input placeholder="{{data.pty1_Name}}" 
+                                 [disabled]="true" [ngStyle]="gridStyle"
+                                />
+                            </div>
+                          </div>
+                          <div nz-col [nzSpan]="8">
+                              <div style="background:white; border-style: ridge; padding: 3px" >
+                                  <h3>Party No.2</h3>
+                                  <hr>
+                                  <input nz-input placeholder="{{data.pty2_Name}}" 
+                                   [disabled]="true" [ngStyle]="gridStyle"
+                                  />
+                              </div>
+                          </div>
+                          <div nz-col [nzSpan]="8">
+                              <div style="background:white; border-style: ridge; padding: 3px" >
+                                  <h3>Party No.3</h3>
+                                  <hr>
+                                  <input nz-input placeholder="{{data.pty3_Name}}" 
+                                   [disabled]="true" [ngStyle]="gridStyle"
+                                  />
+                              </div>
+                          </div>
+                        </div>
+                        <br>
+                    <!-- second row -->
+                        <div nz-row [nzGutter]="8">
+                            <div nz-col [nzSpan]="8">
+                              <div style="background:white; border-style: ridge; padding: 3px" >
+                                <h3>Vote No.1</h3>
+                                <hr>
+                                <input nz-input placeholder={{data.pty1Vote}}
+                                 [disabled]="true" [ngStyle]="gridStyle"
+                                />
+                              </div>
+                            </div>
+                              <div nz-col [nzSpan]="8">
+                                <div style="background:white; border-style: ridge; padding: 3px" >
+                                  <h3>Vote No.2</h3>
+                                  <hr>
+                                  <input nz-input placeholder={{data.pty2Vote}} 
+                                   [disabled]="true" [ngStyle]="gridStyle"
+                                  />
+                                </div>
+                              </div>
+                              <div nz-col [nzSpan]="8">
+                                <div style="background:white; border-style: ridge; padding: 3px" >
+                                  <h3>Vote No.3</h3>
+                                  <hr>
+                                  <input nz-input placeholder={{data.pty3Vote}} 
+                                   [disabled]="true" [ngStyle]="gridStyle"
+                                />
+                              </div>
+                            </div>
+                        </div>
+                        <br>
+                        <!-- third row -->
+                        <div nz-row [nzGutter]="8">
+                            <div nz-col [nzSpan]="8">
+                                <!-- decorate card -->
+                            </div>
+                            <div nz-col [nzSpan]="8">
+                                <div style="background:white; border-style: ridge; padding: 3px" >
+                                    <h3>BadVote(%)</h3>
+                                    <hr>
+                                    <input nz-input placeholder={{data.badVote}} 
+                                     [disabled]="true" [ngStyle]="gridStyle"
+                                  />
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8">
+                                <div style="background:white; border-style: ridge; padding: 3px" >
+                                    <h3>VoteNo(%)</h3>
+                                    <hr>
+                                    <input nz-input placeholder={{data.voteNo}} 
+                                     [disabled]="true" [ngStyle]="gridStyle"
+                                  />
+                                </div>
+                                <p></p>
+                            </div>
+                        </div>
+                        <br>
+                        <!-- button row -->
+                        <div nz-row>
+                            <div nz-col [nzSpan]="24" style="text-align: right;" >
+                              <button 
+                              nz-button nz-popconfirm 
+                              nzTitle="Are you sure to reject this request?" 
+                              (nzOnConfirm)="reject([(data.distID)])" 
+                              (nzOnCancel)="cancel()">
+                              Reject</button>
+                              <button 
+                              nz-button [nzType]="'primary'" 
+                              nz-popconfirm nzTitle="Are you sure to approve this request?" 
+                              (nzOnConfirm)="confirm([(data.distID)])" 
+                              (nzOnCancel)="cancel()">
+                              Approve</button> 
+                            </div>
+                        </div>
+                </nz-card>
+                <br>
+                </div>
+              </div>
+            </div>
+            <div [ngStyle]="{'display' : this.ShowInformationList ? 'none' : 'initial'}">
+              <!-- tag -->
+                <!-- <nz-table #basicTable [nzData]="listOfRequestedModifications" [nzHideOnSinglePage]="true" 
+                [nzPageSize] = 3 width=350px>
+                    <tbody style = "text-align:center;"> -->
+                      <div style = "text-align:center; display: inline-block;">
+                      <div *ngFor="let data of listOfRequestedModifications;">
+                          <h4 style="text-align:center; background-color: #1890ff; color:white; margin:0px; padding:2px ">
+                            {{data.prvName}}
+                          </h4>
+                          <div style="width:350px; height: 70px; background: #ECECEC; text-align: center" >
+                              <div nz-row [nzGutter]="2" >
+                                      <h3 style = "text-align:center;" (click)="detailUpdate(([data.distID]))">District {{data.distNum}}</h3>
+                                      <button 
+                                      nz-button 
+                                      nz-popconfirm 
+                                      nzTitle="Are you sure to reject this request?" 
+                                      (nzOnConfirm)="rejectModifications([(data.distID)])" 
+                                      (nzOnCancel)="cancel()"
+                                      >Reject</button> 
+                                      <button 
+                                      nz-button [nzType]="'primary'" 
+                                      nz-popconfirm nzTitle="Are you sure to approve this request?" 
+                                      (nzOnConfirm)="confirmModifications([(data.distID)])" 
+                                      (nzOnCancel)="cancel()"
+                                      >Approve</button>
+                              </div>
+                              <br>
+                            </div>
+                          <br>
+                        </div>
+                                  <nz-modal
+                                  [nzStyle]="{ top: '20px' }"
+                                  [(nzVisible)]="showDetail" 
+                                  nzTitle="{{this.prvName}} ==> District {{this.distNum}}" 
+                                  (nzOnCancel)="clickClose()" 
+                                  [nzFooter]="null"
+                                  nzWidth=600
+                                >
+                                <nz-card style="text-align: center">
+                                    <div nz-row [nzGutter]="8">
+                                        <div nz-col [nzSpan]="8">
+                                          <div style="background:white; border-style: ridge; padding: 3px" >
+                                              <h3>Party No.1</h3>
+                                              <hr>
+                                              <input nz-input  [(ngModel)]="party1"
+                                                [disabled]="true" style="text-align: center"
+                                              />
+                                          </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="8">
+                                            <div style="background:white; border-style: ridge; padding: 3px" >
+                                                <h3>Party No.2</h3>
+                                                <hr>
+                                                <input nz-input [(ngModel)]="party2"
+                                                  [disabled]="true" style="text-align: center"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="8">
+                                            <div style="background:white; border-style: ridge; padding: 3px" >
+                                                <h3>Party No.3</h3>
+                                                <hr>
+                                                <input nz-input [(ngModel)]="party3"
+                                                  [disabled]="true" style="text-align: center"
+                                                />
+                                            </div>
+                                        </div>
+                                      </div>
+                                      <br>
+                                  <!-- second row -->
+                                      <div nz-row [nzGutter]="8">
+                                          <div nz-col [nzSpan]="8">
+                                            <div style="background:white; border-style: ridge; padding: 3px" >
+                                              <h3>Vote No.1</h3>
+                                              <hr>
+                                              <input nz-input [(ngModel)]="vote1"
+                                                [disabled]="true" style="text-align: center"
+                                              />
+                                            </div>
+                                          </div>
+                                            <div nz-col [nzSpan]="8">
+                                              <div style="background:white; border-style: ridge; padding: 3px" >
+                                                <h3>Vote No.2</h3>
+                                                <hr>
+                                                <input nz-input [(ngModel)]="vote2"
+                                                  [disabled]="true" style="text-align: center"
+                                                />
+                                              </div>
+                                            </div>
+                                            <div nz-col [nzSpan]="8">
+                                              <div style="background:white; border-style: ridge; padding: 3px" >
+                                                <h3>Vote No.3</h3>
+                                                <hr>
+                                                <input nz-input [(ngModel)]="vote3"
+                                                  [disabled]="true" style="text-align: center"
+                                              />
+                                            </div>
+                                          </div>
+                                      </div>
+                                      <br>
+                                      <!-- third row -->
+                                      <div nz-row [nzGutter]="8">
+                                          <div nz-col [nzSpan]="8">
+                                              <!-- decorate card -->
+                                          </div>
+                                          <div nz-col [nzSpan]="8">
+                                              <div style="background:white; border-style: ridge; padding: 3px" >
+                                                  <h3>BadVote(%)</h3>
+                                                  <hr>
+                                                  <input nz-input [(ngModel)]="badvote"
+                                                    [disabled]="true" style="text-align: center"
+                                                />
+                                              </div>
+                                          </div>
+                                          <div nz-col [nzSpan]="8">
+                                              <div style="background:white; border-style: ridge; padding: 3px" >
+                                                  <h3>VoteNo(%)</h3>
+                                                  <hr>
+                                                  <input nz-input [(ngModel)]="voteno"
+                                                    [disabled]="true" style="text-align: center"
+                                                />
+                                              </div>
+                                              <p></p>
+                                          </div>
+                                      </div>
+                                </nz-card>
+                              </nz-modal>
+                      </div>
+                  <!-- </tbody>
+                </nz-table> -->
+            </div>
+    </div>
+    <!-- Officer Request -->
+    <div [ngStyle]="{'display' : this.isOfficer ? 'initial' : 'none'}" >
+            <nz-radio-group [(ngModel)]="request" [nzButtonStyle]="'solid'">
+              <label nz-radio-button nzValue="Information" class="WaitMod" (click)="InformationList()">WaitingModification</label>
+            </nz-radio-group>
+            <br><br>
+            <div style = "text-align:center; display: inline-block;">
+                    <!-- asd -->
+                    <nz-table #basicTable [nzData]="listOfResultRequestedModifications" [nzPageSize] = 4>
+                      <tbody>
+                        <tr *ngFor="let data of basicTable.data;">
+                            <h4 style="text-align:center; background-color: #1890ff; color:white; margin:0px; padding:2px ">
+                                {{data.prvName}}
+                            </h4>
+                            <div style="width:300px; height: 70px; background: #ECECEC; text-align: center" >
+                                <br>
+                                <div nz-row [nzGutter]="2" >
+                                    <div nz-col [nzSpan]="8">
+                                        <h3 style = "text-align:center;" >District {{data.distNum}}</h3>
+                                    </div>
+                                    <div nz-col [nzSpan]="8">
+                                    </div>
+                                    <div nz-col [nzSpan]="8">
+                                        <button 
+                                        nz-button [nzType]="'primary'"
+                                        (click) = "showEditForm(([data.distID]),([data.prvName]))"
+                                        >Edit</button>
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+                            <br>
+                        </tr>
+                      </tbody>
+                    </nz-table>
+                    <!-- asd -->
+                  <!-- PopUp -->
+                            <nz-modal
+                              [nzStyle]="{ top: '20px' }"
+                              [(nzVisible)]="formEditVisible" 
+                              nzTitle="Edit => {{this.provinceEdit}}" 
+                              (nzOnOk)="ComfirmEditOk($event)"
+                              (nzOnCancel)="handleEditCancel($event)"
+                              nzWidth=700
+                            >
+                            <nz-card class="decorate">
+                              <!-- first row -->
+                                <div nz-row [nzGutter]="8">
+                                  <div nz-col [nzSpan]="10">
+                                  </div>
+                                  <!-- Number of District  -->
+                                  <div nz-col [nzSpan]="5" style="text-align: center; display: inline-block;">
+                                    <div style = "text-align:left">
+                                      <h3 >&nbsp;District</h3>
+                                      <input nz-input [(ngModel)]="NumDist"
+                                        [disabled]="true" [ngStyle]="gridStyle"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div nz-col [nzSpan]="9">
+                                  </div>
+                                </div>
+                                <!-- second row -->
+                                <div nz-row [nzGutter]="8">
+                                    <div nz-col [nzSpan]="8">
+                                        <div style = "text-align:left">
+                                          <h3 >&nbsp;Party No.1</h3>
+                                          <nz-select style="width: 180px;" [nzShowSearch] = true 
+                                          [(ngModel)]="selectedPty1Name" (ngModelChange)="Pty1Change($event)">
+                                            <nz-option 
+                                              *ngFor="let option of Party1Data"  
+                                              [nzLabel]="option" 
+                                              [nzValue]="option"
+                                            ></nz-option>
+                                          </nz-select>
+                                        </div>
+                                    </div>
+                                    <div nz-col [nzSpan]="8" style="text-align: center; display: inline-block;">
+                                      <div style = "text-align:left">
+                                        <h3 >&nbsp;Party No.2</h3>
+                                        <nz-select style="width: 180px;" [nzShowSearch] = true 
+                                        [(ngModel)]="selectedPty2Name" (ngModelChange)="Pty2Change($event)" >
+                                            <nz-option 
+                                              *ngFor="let option of Party2Data"  
+                                              [nzLabel]="option" 
+                                              [nzValue]="option" 
+                                            ></nz-option>
+                                        </nz-select>
+                                      </div>
+                                    </div>
+                                    <div nz-col [nzSpan]="8">
+                                        <div style = "text-align:left"> 
+                                          <h3 >&nbsp;Party No.3</h3>
+                                          <nz-select style="width: 180px;"  [nzShowSearch] = true 
+                                          [(ngModel)]="selectedPty3Name" (ngModelChange)="Pty3Change($event)">
+                                              <nz-option 
+                                                *ngFor="let option of Party3Data"  
+                                                [nzLabel]="option" 
+                                                [nzValue]="option" 
+                                              ></nz-option>
+                                          </nz-select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- third row -->
+                                <div nz-row [nzGutter]="8">
+                                    <div nz-col [nzSpan]="8">
+                                        <div style = "text-align:left">
+                                            <h3 >&nbsp;Vote No.1</h3>
+                                            <nz-input-number 
+                                              [(ngModel)]="Pty1Vote"
+                                              [nzMin]="0" 
+                                              [nzMax]="70000"  
+                                              [nzStep]="1"
+                                              style="width: 150px;"
+                                              (ngModelChange)="CheckPty1Vote($event)"
+                                              ></nz-input-number>
+                                          </div>
+                                    </div>
+                                    <div nz-col [nzSpan]="8" style="text-align: center; display: inline-block;">
+                                      <div style = "text-align:left">
+                                          <h3 >&nbsp;Vote No.2</h3>
+                                          <nz-input-number 
+                                            [(ngModel)]="Pty2Vote"
+                                            [nzMin]="0" 
+                                            [nzMax]="70000" 
+                                            [nzStep]="1"
+                                            style="width: 150px;"
+                                            (ngModelChange)="CheckPty2Vote($event)"
+                                            ></nz-input-number>
+                                      </div>
+                                    </div>
+                                    <div nz-col [nzSpan]="8">
+                                        <div style = "text-align:left">
+                                            <h3 >&nbsp;Vote No.3</h3>
+                                            <nz-input-number 
+                                              [(ngModel)]="Pty3Vote"
+                                              [nzMin]="0" 
+                                              [nzMax]="70000" 
+                                              [nzStep]="1"
+                                              style="width: 150px;"
+                                              (ngModelChange)="CheckPty3Vote($event)"
+                                              ></nz-input-number>
+                                          </div>
+                                    </div>
+                                </div>
+                                <!-- fourth row -->
+                                <br>
+                                <div nz-row [nzGutter]="8">
+                                    <div nz-col [nzSpan]="20" style="text-align: center; display: inline-block;">
+                                      <div style = "text-align:right">
+                                          <h3>&nbsp;BadVote(%)</h3>
+                                          <nz-input-number
+                                            [(ngModel)]="BadVoteValue"
+                                            [nzMin]="0"
+                                            [nzMax]="5"
+                                            [nzStep]="0.1"
+                                            [nzFormatter]="BadVoteformatterPercent"
+                                            [nzParser]="BadVoteparserPercent"
+                                            [nzPlaceHolder]="'badvote'" 
+                                            style="width: 75px;"
+                                            ></nz-input-number>
+                                      </div>
+                                    </div>
+                                    <div nz-col [nzSpan]="4">
+                                        <div style = "text-align:right">
+                                            <h3>&nbsp;VoteNo(%)</h3>
+                                            <nz-input-number
+                                            [(ngModel)]="VoteNoValue"
+                                            [nzMin]="0"
+                                            [nzMax]="5"
+                                            [nzStep]="0.1"
+                                            [nzFormatter]="VoteNoformatterPercent"
+                                            [nzParser]="VoteNoparserPercent" 
+                                            [nzPlaceHolder]="'voteno'" 
+                                            style="width: 75px;"
+                                            ></nz-input-number>
+                                          </div>
+                                    </div>
+                                </div>
+                            </nz-card>
+                          </nz-modal>
+              </div>
+    </div>
+</div>

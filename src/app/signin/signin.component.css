@@ -1,0 +1,20 @@
+    .login-form {
+        max-width: 300px;
+    }
+    p { margin:0 }
+    .login-form-button {
+        width: 100%;
+    }
+    body {
+        text-align: center;
+    }
+    form {
+        display: inline-block;
+    }
+    .signin {
+        width:300px;
+        height: 300px;
+        position: fixed; /* or absolute */
+        top: 10%;
+        left: 38%;
+    }

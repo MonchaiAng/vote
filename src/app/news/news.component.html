@@ -1,0 +1,175 @@
+<div style="text-align: center">
+    <app-route></app-route>
+    <br>
+    <!-- LIST NEWS -->
+    <div [ngStyle]="{'display' : this.SHOWFORM ? 'none' : 'initial'}" >
+      <div style = "text-align:right; display: inline-block; width: 700px">
+        <!-- <button nz-button [nzType]="'primary'" 
+        style="background-color: #1890ff; border-color: #1890ff;"
+        (click)="open()"
+        >Create News</button> 
+        <br><br> -->
+        <div [ngStyle]="{'display' : this.isOfficer ? 'initial' : 'initial'}" >
+          <h4 style="text-align:center; background-color: #1890ff; color:white; margin:0px; padding:5px ">Information</h4>
+        </div>
+        <nz-card> 
+          <nz-table #basicTable [nzData]="listOfPosn2" [nzHideOnSinglePage]="true" [nzPageSize] = 8>
+            <tbody>
+              <tr *ngFor= "let data of basicTable.data; let i = index" style = "text-align:left; border-style: ridge;" (click)="showEditForm(([data.distID]),([data.creDTM]))">
+                <h4> {{data.creDTM | date: "dd MMMM y h:mm a"}}</h4>
+                <h4> ==> {{data.msg}}</h4>
+              </tr>
+            </tbody>
+            </nz-table>
+        </nz-card>
+      </div>
+    </div>
+            <nz-modal
+                [nzStyle]="{ top: '20px' }"
+                [(nzVisible)]="formEditVisible" 
+                nzTitle="Detail ==> {{this.creDTM | date: 'dd MMMM y h:mm a'}}" 
+                (nzOnCancel)="clickClose()" 
+                [nzFooter]="null"
+                nzWidth=600
+              >
+              <nz-card style="text-align: center">
+                  <div nz-row [nzGutter]="8">
+                      <div nz-col [nzSpan]="8">
+                        <div style="background:white; border-style: ridge; padding: 3px" >
+                            <h3>Party No.1</h3>
+                            <hr>
+                            <input nz-input  [(ngModel)]="party1"
+                              [disabled]="true" style="text-align: center"
+                            />
+                        </div>
+                      </div>
+                      <div nz-col [nzSpan]="8">
+                          <div style="background:white; border-style: ridge; padding: 3px" >
+                              <h3>Party No.2</h3>
+                              <hr>
+                              <input nz-input [(ngModel)]="party2"
+                                [disabled]="true" style="text-align: center"
+                              />
+                          </div>
+                      </div>
+                      <div nz-col [nzSpan]="8">
+                          <div style="background:white; border-style: ridge; padding: 3px" >
+                              <h3>Party No.3</h3>
+                              <hr>
+                              <input nz-input [(ngModel)]="party3"
+                                [disabled]="true" style="text-align: center"
+                              />
+                          </div>
+                      </div>
+                    </div>
+                    <br>
+                <!-- second row -->
+                    <div nz-row [nzGutter]="8">
+                        <div nz-col [nzSpan]="8">
+                          <div style="background:white; border-style: ridge; padding: 3px" >
+                            <h3>Vote No.1</h3>
+                            <hr>
+                            <input nz-input [(ngModel)]="vote1"
+                              [disabled]="true" style="text-align: center"
+                            />
+                          </div>
+                        </div>
+                          <div nz-col [nzSpan]="8">
+                            <div style="background:white; border-style: ridge; padding: 3px" >
+                              <h3>Vote No.2</h3>
+                              <hr>
+                              <input nz-input [(ngModel)]="vote2"
+                                [disabled]="true" style="text-align: center"
+                              />
+                            </div>
+                          </div>
+                          <div nz-col [nzSpan]="8">
+                            <div style="background:white; border-style: ridge; padding: 3px" >
+                              <h3>Vote No.3</h3>
+                              <hr>
+                              <input nz-input [(ngModel)]="vote3"
+                                [disabled]="true" style="text-align: center"
+                            />
+                          </div>
+                        </div>
+                    </div>
+                    <br>
+                    <!-- third row -->
+                    <div nz-row [nzGutter]="8">
+                        <div nz-col [nzSpan]="8">
+                            <!-- decorate card -->
+                        </div>
+                        <div nz-col [nzSpan]="8">
+                            <div style="background:white; border-style: ridge; padding: 3px" >
+                                <h3>BadVote(%)</h3>
+                                <hr>
+                                <input nz-input [(ngModel)]="badvote"
+                                  [disabled]="true" style="text-align: center"
+                              />
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="8">
+                            <div style="background:white; border-style: ridge; padding: 3px" >
+                                <h3>VoteNo(%)</h3>
+                                <hr>
+                                <input nz-input [(ngModel)]="voteno"
+                                  [disabled]="true" style="text-align: center"
+                              />
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+              </nz-card>
+            </nz-modal>
+    <!-- create New -->
+    <nz-modal
+    [nzStyle]="{ top: '20px' }"
+    [(nzVisible)]="isVisible"
+    nzTitle="Information Form" 
+    (nzOnOk)="handleOk($event)"
+    (nzOnCancel)="handleCancel($event)"
+  >
+  <nz-card style="width:470px;">
+      <div nz-row [nzGutter]="8">
+        <div nz-col [nzSpan]="3">
+        </div>
+        <div nz-col [nzSpan]="18" style="text-align: center;">
+          <div style="float: left;">
+            <h3 style = "text-align:left">&nbsp;Position</h3>
+            <nz-radio-group [(ngModel)]="radioValue" nzName="radiogroup">
+              <label nz-radio nzValue="Center">Center</label>
+              <label nz-radio nzValue="Officer">Officer</label>
+            </nz-radio-group>     
+          </div>
+          <!-- Position Center  -->
+          <div [ngStyle]="{'display' : this.CheckPosition ? 'initial' : 'none'}">
+            <div style="float: right;">
+              <h3 style = "text-align:left">&nbsp;Fullname</h3>
+              <nz-select style="width: 100px; float: right;" [(ngModel)]="singleValueFullname">
+                  <nz-option 
+                    *ngFor="let option of listOfFull" 
+                    [nzLabel]="option.label" 
+                    [nzValue]="option.value"
+                  >
+                  </nz-option>
+              </nz-select>
+            </div>
+          </div>
+        </div>
+        <div nz-col [nzSpan]="3">
+        </div>
+      </div>
+
+      <div nz-row>
+        <div style="float: left;">
+          <br>
+          <h3 style = "text-align:left">&nbsp;message</h3>
+          <textarea rows="7" cols="65" nz-input  required></textarea>
+        </div>
+      </div>
+
+  </nz-card>
+  </nz-modal>
+  </div>
+  
+  

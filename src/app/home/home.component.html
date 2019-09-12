@@ -1,0 +1,285 @@
+<div style="text-align:center">
+  <app-route></app-route>
+  <br>
+  <nz-modal 
+      [nzStyle]="{ top: '20px' }"
+      [(nzVisible)]="isVisible"
+      nzTitle="Information" 
+      (nzOnCancel)="handleCancel()" 
+      (nzOnOk)="handleOk()"
+      [nzFooter]="null"
+      nzWidth=750
+  >
+  <nz-card> 
+    <h4 *ngFor= "let data of listOfFeed; let i = index" style = "text-align:left; border-style: ridge;">{{i+1}}.{{data.msg}}</h4>
+  </nz-card>
+  </nz-modal>
+  <div id="chartContainer" style="height: 300px; width:60%; display: inline-block; "></div>
+  <br><br>
+  <nz-radio-group [(ngModel)]="Reg_Prov" [nzButtonStyle]="'solid'">
+      <label nz-radio-button nzValue="Region" class="Reg_Prov" (click)="ChangeToReg()">Region</label>
+      <label nz-radio-button nzValue="Province" class="Reg_Prov" (click)="ChangeToProv()">Province</label> 
+  </nz-radio-group>
+  <br><br>
+  <!-- PROVINCE --> 
+  <div [ngStyle]="{'display' : this.ShowProvinceList ? 'initial' : 'none'}">
+    <nz-select style="width: 800px;" nzShowSearch nzAllowClear [(ngModel)]="singleValueProv" nzPlaceHolder="Bangkok" 
+    (ngModelChange)="getPrvID()" >
+      <nz-option *ngFor="let option of listOfProv;" [nzLabel]="option.label" [nzValue]="option"
+      ></nz-option>
+    </nz-select> 
+    <br><br>
+    <div [ngStyle]="{'display' : this.isOfficer && this.showCreateDistrict ? 'initial' : 'none'}">
+      <div style = "width: 800px; display: inline-block;">
+        <div style = "text-align:right">
+          <button nz-button [nzType]="'primary'" 
+          style="background-color: #1890ff; border-color: #1890ff;"
+          (click)="createDistrict()" 
+          >Create District</button>
+        </div>
+      </div>
+    </div>
+    <br><br>
+    <!-- Start Form create district -->
+          <nz-modal
+            [nzStyle]="{ top: '20px' }"
+            [(nzVisible)]="formVisible"
+            nzTitle="Create District Form" 
+            (nzOnOk)="handleCreateOk($event)"
+            (nzOnCancel)="handleCreateCancel($event)"
+            nzWidth=700
+          >
+          <nz-card >
+            <!-- first row -->
+              <div nz-row [nzGutter]="8">
+                <div nz-col [nzSpan]="9">
+                </div>
+                <!-- Number of District  -->
+                <div nz-col [nzSpan]="6" style="text-align: center; display: inline-block;">
+                  <div style = "text-align:center">
+                    <h3>District</h3>
+                    <nz-select style="width: 70px;" [(ngModel)]="singleValueFullname">
+                        <nz-option  
+                          *ngFor="let option of listOfNumdist"  
+                          [nzLabel]="option.label" 
+                          [nzValue]="option.value" 
+                        ></nz-option>
+                    </nz-select>
+                  </div>
+                </div>
+                <div nz-col [nzSpan]="9">
+                </div>
+              </div>
+              <!-- second row -->
+              <div nz-row [nzGutter]="8">
+                  <div nz-col [nzSpan]="8">
+                      <div style = "text-align:left">
+                        <h3 >&nbsp;Party No.1</h3>
+                        <nz-select style="width: 180px;" [nzShowSearch] = true 
+                        [(ngModel)]="selectedPty1Name" (ngModelChange)="Pty1Change($event)">
+                          <nz-option 
+                            *ngFor="let option of Party1Data"  
+                            [nzLabel]="option" 
+                            [nzValue]="option"
+                          ></nz-option>
+                        </nz-select>
+                      </div>
+                  </div>
+                  <div nz-col [nzSpan]="8" style="text-align: center; display: inline-block;">
+                    <div style = "text-align:left">
+                      <h3 >&nbsp;Party No.2</h3>
+                      <nz-select style="width: 180px;" [nzShowSearch] = true 
+                      [(ngModel)]="selectedPty2Name" (ngModelChange)="Pty2Change($event)" >
+                          <nz-option 
+                            *ngFor="let option of Party2Data"  
+                            [nzLabel]="option" 
+                            [nzValue]="option" 
+                          ></nz-option>
+                      </nz-select>
+                    </div>
+                  </div>
+                  <div nz-col [nzSpan]="8">
+                      <div style = "text-align:left">
+                        <h3 >&nbsp;Party No.3</h3>
+                        <nz-select style="width: 180px;" [nzShowSearch] = true
+                        [(ngModel)]="selectedPty3Name" (ngModelChange)="Pty3Change($event)">
+                            <nz-option 
+                              *ngFor="let option of Party3Data"  
+                              [nzLabel]="option" 
+                              [nzValue]="option" 
+                            ></nz-option>
+                        </nz-select>
+                      </div>
+                  </div>
+              </div>
+              <!-- third row -->
+              <div nz-row [nzGutter]="8">
+                  <div nz-col [nzSpan]="8">
+                      <div style = "text-align:left">
+                          <h3 >&nbsp;Vote No.1</h3>
+                          <nz-input-number 
+                            [(ngModel)]="Pty1Vote"
+                            [nzMin]="0" 
+                            [nzMax]="70000"  
+                            [nzStep]="1"
+                            style="width: 150px;"
+                            (ngModelChange)="CheckPty1Vote($event)"
+                            ></nz-input-number>
+                        </div>
+                  </div>
+                  <div nz-col [nzSpan]="8" style="text-align: center; display: inline-block;">
+                    <div style = "text-align:left">
+                        <h3 >&nbsp;Vote No.2</h3>
+                        <nz-input-number 
+                          [(ngModel)]="Pty2Vote"
+                          [nzMin]="0" 
+                          [nzMax]="70000" 
+                          [nzStep]="1"
+                          style="width: 150px;"
+                          (ngModelChange)="CheckPty2Vote($event)"
+                          ></nz-input-number>
+                    </div>
+                  </div>
+                  <div nz-col [nzSpan]="8">
+                      <div style = "text-align:left">
+                          <h3 >&nbsp;Vote No.3</h3>
+                          <nz-input-number 
+                            [(ngModel)]="Pty3Vote"
+                            [nzMin]="0" 
+                            [nzMax]="70000" 
+                            [nzStep]="1"
+                            style="width: 150px;"
+                            (ngModelChange)="CheckPty3Vote($event)"
+                            ></nz-input-number>
+                        </div>
+                  </div>
+              </div>
+              <!-- fourth row -->
+              <br>
+              <div nz-row [nzGutter]="8">
+                  <div nz-col [nzSpan]="20" style="text-align: center; display: inline-block;">
+                    <div style = "text-align:right">
+                        <h3>&nbsp;BadVote(%)</h3>
+                        <nz-input-number
+                          [(ngModel)]="BadVoteValue"
+                          [nzMin]="0"
+                          [nzMax]="5"
+                          [nzStep]="0.1"
+                          [nzFormatter]="BadVoteformatterPercent"
+                          [nzParser]="BadVoteparserPercent"
+                          [nzPlaceHolder]="'badvote'" 
+                          style="width: 75px;"
+                          ></nz-input-number>
+                    </div>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                      <div style = "text-align:right">
+                          <h3>&nbsp;VoteNo(%)</h3>
+                          <nz-input-number
+                          [(ngModel)]="VoteNoValue"
+                          [nzMin]="0"
+                          [nzMax]="5"
+                          [nzStep]="0.1"
+                          [nzFormatter]="VoteNoformatterPercent"
+                          [nzParser]="VoteNoparserPercent" 
+                          [nzPlaceHolder]="'voteno'" 
+                          style="width: 75px;"
+                          ></nz-input-number>
+                        </div>
+                  </div>
+              </div>
+          </nz-card>
+        </nz-modal>
+    <!-- End Form create district -->
+
+    <!-- DOWN FORM -->
+    <!-- PROVINCE -->
+    <nz-table #basicTable [nzData]="listOfData" [nzHideOnSinglePage]="true" 
+    style="width: 800px; text-align:center; display: inline-block;">
+    <tbody>
+      <div class = "frame kanit" *ngFor="let data of listOfData">
+        <div class="container" style="width: 800px; text-align:center; display: inline-block;">
+          <h4 style=" background-color: #1890ff; color:white; margin:0px; padding:5px; text-align:center;">District {{data.distNum}}</h4>
+          <div [ngStyle]="{'display' : this.isOfficer ? 'initial' : 'none'}"class="overlay">
+              <div [ngStyle]="{'display' : data.updFlag? 'none' : 'initial'}">
+                <a nz-popconfirm nzTitle="Are you sure edit this district?" 
+                (nzOnConfirm)="confirm(([data.distID]))" (nzOnCancel)="cancel()"class="text">Request to edit</a>
+              </div>
+            <div [ngStyle]="{'display' : data.updFlag? 'initial' : 'none'}">
+                <a class="text">Waiting Center</a>
+            </div>
+          </div>
+        </div>
+            <tr >
+              <td style="background-color: #bae7ff;  text-align:center;height:70px; ">
+              <div style="background-color: #bae7ff; text-align:center; width:60; ">
+                <img src= "data:image/png;base64,{{data.pty1_Logo}}"
+                width="60" height="60" > 
+              </div>
+              </td>
+              <td style="width: 300px; height:70px; margin:0px; padding:0px"><h3>&nbsp;{{ data.pty1_Name }}</h3></td>
+              <td style="height:70px; padding:0px" class="vote"><h1>{{ data.pty1Vote| number}}&nbsp;</h1></td>
+            </tr>
+            <tr >
+                <!-- <td style="width: 50px; height:50px; background-color: #bae7ff;  text-align:center; ">
+                  <img src= "assets/Logo/party-{{data.pty2_ID}}.jpg"
+                  width="40" > 
+                </td> -->
+                <td style="width: 50px; height:50px; background-color: #bae7ff;  text-align:center; height:70px;">
+                <div style="background-color: #bae7ff; text-align:center; width:60; ">
+                    <img src= "data:image/png;base64,{{data.pty2_Logo}}"
+                    width="60" height="60" > 
+                  </div>
+                </td>
+                <td style="width: 300px; height:70px; margin:0px; padding:0px"><h3>&nbsp;{{ data.pty2_Name }}</h3></td>
+                <td style="height:70px; padding:0px" class="vote"><h1>{{ data.pty2Vote| number}}&nbsp;</h1></td>
+            </tr>
+            <tr >
+                <!-- <td style="width: 50px; height:50px; background-color: #bae7ff;  text-align:center; ">
+                  <img src= "assets/Logo/party-{{data.pty3_ID}}.jpg"
+                  width="40" > 
+                </td> -->
+                <td style="width: 50px; height:50px; background-color: #bae7ff;  text-align:center;height:70px; ">
+                <div style="background-color: #bae7ff; text-align:center; width:60; ">
+                    <img src= "data:image/png;base64,{{data.pty3_Logo}}"
+                    width="60" height="60" > 
+                  </div>
+                </td>
+                <td style="width: 300px; height:70px; margin:0px; padding:0px"><h3>&nbsp;{{ data.pty3_Name }}</h3></td>
+                <td style="height:70px; padding:0px" class="vote"><h1>{{ data.pty3Vote| number}}&nbsp;</h1></td>
+            </tr>
+            <br>
+          </div>
+        </tbody> 
+      </nz-table>
+      <br>
+    <br><br>
+  </div>
+  <!-- REGION -->
+  <div [ngStyle]="{'display' : this.ShowProvinceList ? 'none' : 'initial'}">
+    <nz-select style="width: 800px;" [(ngModel)]="singleValueReg" nzPlaceHolder="Bangkok" 
+        [nzShowSearch] = true (ngModelChange)="getRgnID()">
+        <nz-option *ngFor="let option of listOfReg; let i = index" [nzLabel]="option.label" [nzValue]="option"></nz-option>
+    </nz-select>
+    <br><br>
+    <div class = "frame kanit">
+        <!-- <h4 style="text-align:center; background-color: #1890ff; color:white; margin:0px; padding:5px ">Bangkok</h4> -->
+        <nz-table #basicTable [nzData]="listOfData2" [nzHideOnSinglePage]="true" >
+          <tbody>
+            <tr *ngFor="let data of listOfData2">
+              <td style="width: 50px; height:50px; background-color: #bae7ff;  text-align:center;height:70px; ">
+                  <div style="background-color: #bae7ff; text-align:center; width:60; ">
+                      <img src= "data:image/png;base64,{{data.logo}}"
+                      width="60" height="60" > 
+                    </div> 
+              </td>
+              <td style="width: 300px; height:70px; margin:0px; padding:0px"><h3>&nbsp;{{ data.ptyName }}</h3></td>
+              <td style="height:70px; padding:0px" class="vote"><h1>{{ data.mHR }}&nbsp;seats</h1></td>
+            </tr>
+          </tbody> 
+        </nz-table>
+      </div>
+    <br><br>
+  </div>
+
+</div>
